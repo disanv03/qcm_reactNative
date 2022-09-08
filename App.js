@@ -20,9 +20,7 @@ function Index(){
     );
     }else{
       return(
-        <Text>Bienvenue!
-          Chargement en cours...
-        </Text>
+        <Text>Bienvenue! Chargement en cours...</Text>
       )
     }
 }
@@ -30,24 +28,37 @@ function Index(){
 function QuestionCards(props){
   console.log(props.questions);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
 
     return (
       <View className="question">
         <Text title={questionIndex}>{props.questions[questionIndex]['question']}</Text>
-        <Answer reponses={props.questions[questionIndex]} />
+        <Answer reponses={props.questions[questionIndex]}
+                questionIndex={questionIndex}
+                setQuestionIndex={setQuestionIndex}
+                score={score}
+                setScore={setScore}
+         />
+         <Text title={score}>Votre Score: {score}/{props.questions.length}</Text>
       </View>
       )
 }
 
 function Answer(props){
+  let correct_answer = props.reponses.correct_answer;
   let array = [... props.reponses.incorrect_answers, 
-              props.reponses.correct_answer];
+              correct_answer];
+  
+  let validate = (e) =>{
+    e.target == correct_answer ? props.setScore(props.score+1) :
+                                 props.setQuestionIndex(props.questionIndex+1);
+  }
 
   return (
     <View>
       {array.map((reponse, id) => (
         <View key={id} style={styles.lesReponses}>
-          <Button title={reponse}></Button>
+          <Button title={reponse} onPress={validate}>{reponse}</Button>
         </View>
       ))}
     </View>
