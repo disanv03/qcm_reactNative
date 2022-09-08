@@ -1,4 +1,3 @@
-import Checkbox from 'expo-checkbox';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
@@ -43,26 +42,18 @@ function QuestionCards(props){
 function Answer(props){
   let array = [... props.reponses.incorrect_answers, 
               props.reponses.correct_answer];
-              
+
   return (
     <View>
       {array.map((reponse, id) => (
         <View key={id} style={styles.lesReponses}>
-          <Text>{reponse}<Check /></Text>
+          <Button title={reponse}></Button>
         </View>
       ))}
     </View>
   )
 }
 
-function Check(){
-  const [isChecked, setChecked] = useState(false);
-  return (
-    <View>
-      <Checkbox value={isChecked} onValueChange={setChecked} />
-    </View>
-  )
-}
 
 export default function App() {
   return (
