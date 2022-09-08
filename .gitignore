@@ -1,0 +1,20 @@
+node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+assets/
+.expo-shared
+app.json
+babel.config.js
+package-lock.json
+package.json
