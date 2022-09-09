@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 
-
-
 function Index() {
   const [questions, setQuestion] = useState();
 
@@ -38,7 +36,7 @@ function QuestionCards(props) {
   }
   return (
     <View className="question">
-      <Text title={questionIndex}>{props.questions[questionIndex]['question']}</Text>
+      <Text title={questionIndex}>{props.questions[questionIndex]['question'].replace(/&quot;|&#039;/g, "\'")}</Text>
       <Answer reponses={props.questions[questionIndex]}
         questionIndex={questionIndex}
         setQuestionIndex={setQuestionIndex}
@@ -67,7 +65,7 @@ function Answer(props) {
     <View>
       {array.map((reponse, id) => (
         <View key={id} style={styles.lesReponses}>
-          <Button title={reponse} onPress={()=>validate(reponse)}></Button>
+          <Button title={reponse.replace(/&quot;|&#039;/g, "\'")} onPress={()=>validate(reponse)}></Button>
         </View>
       ))}
     </View>
