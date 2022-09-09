@@ -12,7 +12,7 @@ web-build/
 
 # macOS
 .DS_Store
-assets/
+
 .expo-shared
 app.json
 babel.config.js
