@@ -1,13 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
+
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 function Index() {
   const [questions, setQuestion] = useState();
 
   useEffect(() => {
-    fetch("https://opentdb.com/api.php?amount=10&category=18")
+    fetch("https://opentdb.com/api.php?amount=10&category=9")
       .then(response => response.json())
       .then(data => setQuestion(data.results))
       .catch((e)=> console.log("Error: " + e))
@@ -30,25 +31,36 @@ function QuestionCards(props) {
   if(questionIndex >= props.questions.length){
     return (
       <View>
-        <Text title={score}>Votre Score: {score}/{props.questions.length}</Text>
+        <Text title={score} style={styles.scoreStyle}>Votre Score: {score}/{props.questions.length}</Text>
       </View>
     )
   }
   return (
     <View className="question">
+      <Image 
+        style={styles.logo}
+        source={require('./assets/quiz.png')}
+      />
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['rgba(12,132,240,94.8)', 'transparent']}
+        style={styles.gradientBar}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 1 }}
+      />
       <Timer 
         tempsMax={30}
         questionMax={props.questions.length}
         questionIndex={questionIndex}
         setQuestionIndex={setQuestionIndex} />
-      <Text title={questionIndex}>{props.questions[questionIndex]['question'].replace(/&quot;|&#039;/g, "\'")}</Text>
+      <Text title={questionIndex} style={styles.questionStyle}>{props.questions[questionIndex]['question'].replace(/&quot;|&#039;|&ldquo;|&shy;/g, "\'")}</Text>
       <Answer reponses={props.questions[questionIndex]}
         questionIndex={questionIndex}
         setQuestionIndex={setQuestionIndex}
         score={score}
         setScore={setScore}
       />
-      <Text title={score}>Votre Score: {score}/{props.questions.length}</Text>
+      <Text title={score} style={styles.scoreStyle}>Votre Score: {score}/{props.questions.length}</Text>
     </View>
   )
 }
@@ -70,7 +82,7 @@ function Answer(props) {
     <View>
       {array.map((reponse, id) => (
         <View key={id} style={styles.lesReponses}>
-          <Button title={reponse.replace(/&quot;|&#039;/g, "\'")} onPress={()=>validate(reponse)}></Button>
+          <Button title={reponse.replace(/&quot;|&#039;|&ldquo;|&shy;/g, "\'")} onPress={()=>validate(reponse)}></Button>
         </View>
       ))}
     </View>
@@ -99,7 +111,7 @@ function Timer(props){
   })
 
   return (
-    <View><Text>{timer}</Text></View>
+    <View ><Text style={styles.timer}>{timer}</Text></View>
   )
 }
 
@@ -114,10 +126,43 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#61dafb',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  lesReponses: {
+  gradientBar: {
+    borderRadius: 5,
+    left: 0,
+    right: 0,
+    top: 20,
+    height: 20,
+  },
+  timer: {
+    color: '#009FFA',
+    textShadowColor:'#585858',
+    textShadowOffset: {width: 2, height: 2},
+    textShadowRadius: 2,
+    fontSize: 25,
+    fontWeight: "bold",
+    top: -10,
+    right: -5
+  },
+  questionStyle: {
+    color: 'white',
+    textShadowOffset: {width: 2, height: 1},
+    textShadowRadius: 2,
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  scoreStyle: {
+    color: 'white',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 2
+  },
+  logo: {
+    
+    width: 100,
+    height: 100,
+    top: -50,
   }
 });
