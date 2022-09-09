@@ -28,28 +28,31 @@ function Index() {
 function QuestionCards(props) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [tempsEcoule, setTempsEcoule] = useState(30);
   if(questionIndex >= props.questions.length){
     return (
       <View>
-        <Text title={score} style={styles.scoreStyle}>Votre Score: {score}/{props.questions.length}</Text>
+        <Text title={score} style={styles.scoreStyle}>Score: {score}/{props.questions.length}</Text>
       </View>
     )
   }
   return (
-    <View className="question">
+    <View className="question" style={styles.questionMain}>
       <Image 
         style={styles.logo}
         source={require('./assets/quiz.png')}
       />
       <LinearGradient
         // Background Linear Gradient
-        colors={['rgba(12,132,240,94.8)', 'transparent']}
+        
+        colors={['rgba(0,143,245,96.8)', 'transparent']}
         style={styles.gradientBar}
         start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 1 }}
+        end={{ x: tempsEcoule/30, y: 1 }}
       />
       <Timer 
         tempsMax={30}
+        tempsEcoule={setTempsEcoule}
         questionMax={props.questions.length}
         questionIndex={questionIndex}
         setQuestionIndex={setQuestionIndex} />
@@ -60,7 +63,7 @@ function QuestionCards(props) {
         score={score}
         setScore={setScore}
       />
-      <Text title={score} style={styles.scoreStyle}>Votre Score: {score}/{props.questions.length}</Text>
+      <Text title={score} style={styles.scoreStyle}>Score: {score}/{props.questions.length}</Text>
     </View>
   )
 }
@@ -99,6 +102,7 @@ function Timer(props){
   useEffect(()=> {
     let timeout = setTimeout(() => {
       setTimer(timer-1)
+      props.tempsEcoule(timer-1)
     }, 1000)
     if(timer <= 0 && props.questionIndex < props.questionMax){
       clearTimeout(timeout);
@@ -160,9 +164,14 @@ const styles = StyleSheet.create({
     textShadowRadius: 2
   },
   logo: {
-    
+    alignSelf: 'center',
     width: 100,
     height: 100,
     top: -50,
+  },
+  questionMain: {
+    flex: 1,
+    justifyContent: 'center',
+    
   }
 });
