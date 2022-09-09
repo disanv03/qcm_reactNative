@@ -36,6 +36,11 @@ function QuestionCards(props) {
   }
   return (
     <View className="question">
+      <Timer 
+        tempsMax={30}
+        questionMax={props.questions.length}
+        questionIndex={questionIndex}
+        setQuestionIndex={setQuestionIndex} />
       <Text title={questionIndex}>{props.questions[questionIndex]['question'].replace(/&quot;|&#039;/g, "\'")}</Text>
       <Answer reponses={props.questions[questionIndex]}
         questionIndex={questionIndex}
@@ -69,6 +74,32 @@ function Answer(props) {
         </View>
       ))}
     </View>
+  )
+}
+
+function Timer(props){
+  const  [timer, setTimer] = useState(props.tempsMax);
+
+  useEffect(() => {
+    setTimer(props.tempsMax)
+  }, [props.questionIndex])
+
+  useEffect(()=> {
+    let timeout = setTimeout(() => {
+      setTimer(timer-1)
+    }, 1000)
+    if(timer <= 0 && props.questionIndex < props.questionMax){
+      clearTimeout(timeout);
+      setTimer(props.tempsMax);
+      props.setQuestionIndex(props.questionIndex+1);
+    }else if(props.questionIndex >= props.questionMax){
+      clearTimeout(timeout);
+    }
+    return () => clearTimeout(timeout)
+  })
+
+  return (
+    <View><Text>{timer}</Text></View>
   )
 }
 
